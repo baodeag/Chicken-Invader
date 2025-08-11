@@ -5,8 +5,22 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Wave Config", fileName = "New Wave Config")]
 public class WaveConfigSO : ScriptableObject
 {
+    [SerializeField] List<GameObject> enemyPrefabs;
     [SerializeField] Transform pathPrefab;
     [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float timeBetweenEnemySpawns = 1f;
+    [SerializeField] float spawnTimeVariance = 0f; // variance in spawn time for each enemy
+    [SerializeField] float minimumSpawnTime = 0.2f; // minimum spawn time for each enemy
+
+    public int GetEnemyCount() //count of enemy prefabs
+    {
+        return enemyPrefabs.Count;
+    }
+
+    public GameObject GetEnemyPrefab(int index) 
+    {
+        return enemyPrefabs[index]; // returns the enemy prefab at the specified index
+    }
 
     public Transform GetStartingWaypoint()
     {
@@ -26,5 +40,12 @@ public class WaveConfigSO : ScriptableObject
     public float GetMoveSpeed()
     {
         return moveSpeed;
+    }
+
+    public float GetRandomSpawnTime()
+    {
+        float spawnTime = Random.Range(timeBetweenEnemySpawns - spawnTimeVariance, 
+                                       timeBetweenEnemySpawns + spawnTimeVariance);
+        return Mathf.Clamp(spawnTime, minimumSpawnTime, float.MaxValue); // ensure the spawn time is not less than the minimum
     }
 }
