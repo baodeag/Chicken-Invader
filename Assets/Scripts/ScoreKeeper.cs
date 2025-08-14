@@ -6,6 +6,28 @@ public class ScoreKeeper : MonoBehaviour
 {
     int score;
 
+    static ScoreKeeper instance;
+    void Awake()
+    {
+        ManageSingleton();
+    }
+
+    void ManageSingleton()
+    {
+        //int instanceCount = FindObjectsOfType(GetType()).Length;
+        //if(instanceCount > 1)
+        if (instance != null)
+        {
+            gameObject.SetActive(false); // Disable the duplicate instance
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this; // Assign the current instance to the static variable
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
     public int GetScore()
     {
         return score;

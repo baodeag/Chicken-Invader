@@ -12,6 +12,30 @@ public class AudioPlayer : MonoBehaviour
     [SerializeField] AudioClip damageClip;
     [SerializeField] [Range(0f, 1f)] float damageVolume = 1f;
 
+    static AudioPlayer instance;
+
+
+    void Awake()
+    {
+        ManageSingleton();
+    }
+
+    void ManageSingleton()
+    {
+        //int instanceCount = FindObjectsOfType(GetType()).Length;
+        //if(instanceCount > 1)
+        if(instance != null)
+        {
+            gameObject.SetActive(false); // Disable the duplicate instance
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this; // Assign the current instance to the static variable
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
     public void PlayShootingClip()
     {
         PlayClip(shootingClip, shootingVolume);
